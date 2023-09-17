@@ -14,7 +14,7 @@ export class EnvioReceptorService {
   $getListSource = this.listSource.asObservable();
 
   constructor(private http: HttpClient) { }
-
+  
   sendObjectSource(data: any){
     this.objectSource.next(data);
   }
