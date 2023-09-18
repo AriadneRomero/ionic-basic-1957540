@@ -1,33 +1,43 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-
+import { Alumno } from '../interface/alumno';
 @Injectable({
   providedIn: 'root'
 })
-export class EnvioReceptorService {
+export class AlumnoService {
 
-  private objectSource = new BehaviorSubject<{}>({});
-  private listSource = new BehaviorSubject<any[]>([]);
+  private alumnos: Alumno[]= [];
 
-  $getObjectSource = this.objectSource.asObservable();
-  $getListSource = this.listSource.asObservable();
+  constructor() { }
 
-  constructor(private http: HttpClient) { }
-
-  sendObjectSource(data: any){
-    this.objectSource.next(data);
+  public agregarAlumno(alumno: Alumno){
+    if(this.alumnos.length>0){
+      alumno.id = this.alumnos.length + 1 ;
+    } else {
+      alumno.id = 1;
+    }
+    this.alumnos.push(alumno);
   }
 
-  sendListSource(data: any[]){
-    this.listSource.next(data);
+  public borrarAlumno(id: number){
+    this.alumnos =
+    this.alumnos.filter((al=>al.id!=id));
   }
 
-  getPersonajes() :Observable<any>{
-    return this.http.get<any>(`http://swapi.dev/api/people/`,{});
+  public getAlumos(): Alumno[]{
+    return this.alumnos;
   }
 
-  getPersonaje(idPersonaje:string): Observable<any>{
-    return this.http.get<any>(`http://swapi.dev/api/people/${idPersonaje}`,{});
+  public setAlumnos(alumnos: Alumno[]){
+    this.alumnos = alumnos;
+  }
+
+  public actualiza(alumno: Alumno): Alumno[]{
+    this.alumnos.filter(
+      (al)=>al.id==alumno.id
+    ).map(al=>{
+      al.matricula=alumno.matricula;
+      al.nombre = alumno.nombre;
+    });
+    return this.alumnos;
   }
 }
