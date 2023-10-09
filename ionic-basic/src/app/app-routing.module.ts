@@ -1,24 +1,30 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { AutGuardGuard } from './service/aut-guard.guard';
 
 const routes: Routes = [
   {
-    path: 'home',
-    loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
+    path: 'logout',
+    loadChildren: () => import('./logout/logout.module').then( m => m.HomePageModule)
   },
+
   {
     path: '',
     redirectTo: 'receta', //home
     pathMatch: 'full'
   },
+
   {
     path: 'presupuesto',
-    loadChildren: () => import('./presupuesto/presupuesto.module').then( m => m.PresupuestoPageModule)
+    loadChildren: () => import('./presupuesto/presupuesto.module').then( m => m.PresupuestoPageModule),
+    canActivate: [AutGuardGuard]
   },
+
   {
     path: 'alumnos',
     loadChildren: () => import('./alumnos/alumnos.module').then( m => m.AlumnosPageModule)
   },
+
   {
     path: 'inicio',
     loadChildren: () => import('./inicio/inicio.module').then( m => m.InicioPageModule)
@@ -27,29 +33,42 @@ const routes: Routes = [
     path: 'receptor',
     loadChildren: () => import('./receptor/receptor.module').then( m => m.ReceptorPageModule)
   },
+
   {
     path: 'detalle-receta',
-    loadChildren: () => import('./detalle-receta/detalle-receta.module').then( m => m.DetalleRecetaPageModule)
+    loadChildren: () => import('./detalle-receta/detalle-receta.module').then( m => m.DetalleRecetaPageModule),
+    canActivate: [AutGuardGuard]
   },
+
   {
     path: 'receta',
-    loadChildren: () => import('./receta/receta.module').then( m => m.RecetaPageModule)
+    loadChildren: () => import('./receta/receta.module').then( m => m.RecetaPageModule),
+    canActivate: [AutGuardGuard]
+  },
+
+  {
+    path: 'tabs',
+    loadChildren: () => import('./tabs/tabs.module').then( m => m.TabsPageModule),
+    canActivate: [AutGuardGuard]
   },
   
   {
-    path: 'tabs',
-    loadChildren: () => import('./tabs/tabs.module').then( m => m.TabsPageModule)
-  },  {
-    path: 'float-menu',
-    loadChildren: () => import('./float-menu/float-menu.module').then( m => m.FloatMenuPageModule)
+    path: 'login',
+    loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
   },
+
   {
-    path: 'tabs',
-    loadChildren: () => import('./tabs/tabs.module').then( m => m.TabsPageModule)
+    path: 'register',
+    loadChildren: () => import('./register/register.module').then( m => m.RegisterPageModule)
   },
 
 
-
+  
+  // {
+  //   path: 'float-menu',
+  //   loadChildren: () => import('./float-menu/float-menu.module').then( m => m.FloatMenuPageModule)
+  // },
+  
 ];
 
 @NgModule({
