@@ -5,7 +5,6 @@ import { Subscription } from 'rxjs';
 import { AutService } from '../service/aut.service';
 import { MenuService } from '../service/menu.service';
 import { onAuthStateChanged } from 'firebase/auth';
-
 @Component({
   selector: 'app-float-menu',
   templateUrl: './float-menu.component.html',
