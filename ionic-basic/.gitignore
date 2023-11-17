@@ -23,6 +23,9 @@ log.txt
 /platforms
 /plugins
 
+ios/*
+android/*
+
 # Compiled output
 /dist
 /tmp
