@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-
 import { User } from '../models/user';
 import { ModalErrorComponent } from '../componentes/modal-error/modal-error.component';
 import { ModalController, LoadingController } from '@ionic/angular';
@@ -7,6 +6,7 @@ import { AutService } from '../service/aut.service';
 import { Router } from '@angular/router';
 import { MenuService } from '../service/menu.service';
 import {FormGroup, FormBuilder, Validators, FormControl, AbstractControl} from '@angular/forms';
+import { StorageService } from '../service/storage.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -15,18 +15,21 @@ import {FormGroup, FormBuilder, Validators, FormControl, AbstractControl} from '
 export class LoginPage implements OnInit {
   user: User = new User();
   ionicForm: any;
+  usuario: any = {};
   constructor(
     private router: Router,
     private modalCtrl: ModalController,
     private autSvc: AutService,
     private menu: MenuService,
     private formBuilder: FormBuilder,
-    public loadingController: LoadingController
+    public loadingController: LoadingController,
+    private storage : StorageService
   ) { }
 
   ngOnInit() {
     this.buildForm();
   }
+
   buildForm(){
     this.ionicForm = this.formBuilder.group({
       email: new FormControl('',{validators: [Validators.email,Validators.required]}),
@@ -39,6 +42,7 @@ export class LoginPage implements OnInit {
         console.log('Successfully logged in!');
         this.loadingController.dismiss();
         setTimeout(() => {
+          this.guardarLocalStorage();
           this.menu.setTitle("presupuesto");
           this.router.navigate(['main/presupuesto']);
         }, 650);
@@ -90,8 +94,6 @@ export class LoginPage implements OnInit {
     this.menu.setTitle("register")
     this.router.navigate(['/register']);
   }  
-
-  //Modal para poner aviso de cargando
   async presentLoadingWithOptions() {
     const loading = await this.loadingController.create({
       //spinner: null,
@@ -101,10 +103,24 @@ export class LoginPage implements OnInit {
       //cssClass: 'custom-class custom-loading',
       backdropDismiss: true
     });
-
     await loading.present();
-
     const { role, data } = await loading.onDidDismiss();
     console.log('Loading dismissed with role:', role);
   }   
+  getUsuario(){
+    this.storage.getValue('usuario').
+    then(user=>{
+      this.usuario = user;
+      console.info(this.usuario);
+    }).
+    catch(error=>{
+      console.error(error);
+    });
+  }
+  guardarLocalStorage(){
+    this.storage.setValue('usuario',
+    {nombre:'asrr nombre', direccion:'Jose Silvestre aramberri'}) 
+    // lo que aparece en el storage
+    this.getUsuario();
+  }
 }
